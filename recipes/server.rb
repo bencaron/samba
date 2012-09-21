@@ -18,9 +18,8 @@
 #
 
 users = nil
-shares = data_bag_item("samba", "shares")
 
-shares["shares"].each do |k,v|
+node["samba"]["shares"].each do |k,v|
   if v.has_key?("path")
     directory v["path"] do
       recursive true
@@ -57,13 +56,14 @@ template node["samba"]["config"] do
   owner "root"
   group "root"
   mode "0644"
-  variables :shares => shares["shares"]
+  variables :shares => node["samba"]["shares"]
   notifies :restart, resources(:service => svcs)
 end
 
 if users
   users.each do |u|
     samba_user u["id"] do
+      only_if { u.has_key? "smbpasswd" }
       password u["smbpasswd"]
       action [:create, :enable]
     end
