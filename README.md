@@ -42,6 +42,7 @@ The attributes are used to set up the default values in the smb.conf, and set de
 * `node["samba"]["config"]` - Location of Samba configuration, default "/etc/samba/smb.conf".
 * `node["samba"]["log_dir"]` - Location of Samba logs, default "/var/log/samba/%m.log".
 * `node["samba"]["shares"]` - Shares configuration. See below for usage.
+* `node["samba"]["netbios_name"]` - Netbios name to us. See below for usage.
 
 Recipes
 =======
@@ -112,6 +113,9 @@ Example data bag item for a user. Note that the user must exist on the system al
     }
 
 Unfortunately, smbpasswd does not take a hashed password as an argument - the password is echoed and piped to the smbpasswd program. This is a limitation of Samba.
+
+Netbios does not allow hostname longer than 15 characters. If thats the case for your, set an alternate hostname to use in node["samba"]["netbios_name"]. You also need to make sure this hostname is registered and usable for your clients nodes.
+
 
 License and Author
 ==================

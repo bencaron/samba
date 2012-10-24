@@ -17,6 +17,7 @@
 # limitations under the License.
 
 default["samba"]["workgroup"] = "SAMBA"
+default["samba"]["netbios_name"] = nil
 default["samba"]["interfaces"] = "lo 127.0.0.1"
 default["samba"]["hosts_allow"] = "127.0.0.0/8"
 default["samba"]["bind_interfaces_only"] = "no"
