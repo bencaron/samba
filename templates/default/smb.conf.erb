@@ -14,7 +14,7 @@
   load printers = <%= node["samba"]["load_printers"] %>
   passdb backend = <%= node["samba"]["passdb_backend"] %>
   dns proxy = <%= node["samba"]["dns_proxy"] %>
-<% if node["samba"]["netbios_name"] is not nil %>
+<% if node["samba"]["netbios_name"] != nil %>
   netbios name =<%= node["samba"]["netbios_name"] %>
 <% end %>
 #============================ Share Definitions ==============================
