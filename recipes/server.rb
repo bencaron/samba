@@ -33,7 +33,7 @@ end
 
 package value_for_platform(
   ["ubuntu", "debian", "arch"] => { "default" => "samba" },
-  ["redhat", "centos", "fedora", "scientific", "amazon"] => { "default" => "samba3x" },
+  ["redhat", "centos", "fedora", "scientific", "amazon"] => { ["6", "6.0", "6.1", "6.2", "6.3", "6.4"] => "samba", "default" => "samba3x" },
   "default" => "samba"
 )
 
