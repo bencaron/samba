@@ -41,6 +41,8 @@ The attributes are used to set up the default values in the smb.conf, and set de
 * `node["samba"]["socket_options"]` - Socket options, default "`TCP_NODELAY`"
 * `node["samba"]["config"]` - Location of Samba configuration, default "/etc/samba/smb.conf".
 * `node["samba"]["log_dir"]` - Location of Samba logs, default "/var/log/samba/%m.log".
+* `node["samba"]["shares"]` - Shares configuration. See below for usage.
+* `node["samba"]["netbios_name"]` - Netbios name to us. See below for usage.
 
 Recipes
 =======
@@ -79,26 +81,27 @@ Usage
 
 The `samba::default` recipe includes `samba::client`, which simply installs smbclient package. Remaining information in this section pertains to `samba::server` recipe.
 
-Set attributes as desired in a role, and create a data bag named `samba` with an item called `shares`. Also create a `users` data bag with an item for each user that should have access to samba.
+Set attributes as desired in a role, and configure the attribute node["samba"]["shares]. Also create a `users` data bag with an item for each user that should have access to samba.
 
-Example data bag item for a single share named `export` in the `shares` item.
+Example attribute for a single share named `export` in the `shares` item.
 
-    % cat data_bags/samba/shares.json
-    {
-      "id": "shares",
-      "shares": {
-        "export": {
-          "comment": "Exported Share",
-          "path": "/srv/export",
-          "guest ok": "no",
-          "printable": "no",
-          "write list": ["jtimberman"],
-          "create mask": "0664",
-          "directory mask": "0775"
-        }
-      }
-    }
-
+ % cat roles/sambaserver.rb
+ name "sambasserver"
+ description "A Samba server"
+ default_attributes "samba" => { 
+                    "shares" => { 
+                      "myshare" => {  
+                        "comment" => "a share",
+                        "path" => "/shares",
+                        "guest ok" => "no",
+                        "printable" => "no",
+                        "write list" => ["jtimberman"],
+                        "create mask" => "0664",
+                        "directory mask" => "0775"
+                      } 
+                    }
+                  }
+    
 Each of the hashes in `shares` will be a stanza in the smb.conf.
 
 Example data bag item for a user. Note that the user must exist on the system already. This is the minimal users data bag to set up the `smbpasswd` entry. More options are available for those using the `users` cookbook, see the readme for that cookbook for more information.
@@ -110,6 +113,9 @@ Example data bag item for a user. Note that the user must exist on the system al
     }
 
 Unfortunately, smbpasswd does not take a hashed password as an argument - the password is echoed and piped to the smbpasswd program. This is a limitation of Samba.
+
+Netbios does not allow hostname longer than 15 characters. If thats the case for your, set an alternate hostname to use in node["samba"]["netbios_name"]. You also need to make sure this hostname is registered and usable for your clients nodes.
+
 
 License and Author
 ==================

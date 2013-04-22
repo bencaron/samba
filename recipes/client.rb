@@ -19,5 +19,6 @@
 
 package value_for_platform(
   "arch" => { "default" => "smbclient" },
+  ["redhat", "centos", "fedora"] => { "default" => "samba3x-client" },
   "default" => "smbclient"
 )
