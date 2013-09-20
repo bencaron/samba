@@ -57,7 +57,9 @@ template node["samba"]["config"] do
   group "root"
   mode "0644"
   variables :shares => node["samba"]["shares"]
-  notifies :restart, resources(:service => svcs)
+  svcs.each do |s|
+    notifies :restart, "service[#{s}]"
+  end
 end
 
 if users
